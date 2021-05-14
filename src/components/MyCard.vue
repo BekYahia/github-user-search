@@ -1,4 +1,5 @@
 <template>
+	<MyCardSkeleton v-if="!updatedDOM" />
 	<div class="card" v-for="user in users" :key="user.id">
 		<div class="card-header">
 			<img width="50" height="50" :src="user.node.avatarUrl" alt="profile pic" />
@@ -14,16 +15,16 @@
 			<p> {{ user.node.bio || '-' }} </p>
 		</div>
 		<div class="card-footer">
-			<small v-if="user.node.location">🏠 {{ user.node.location }} </small>
-			<small> ⭐️ {{ user.node.starredRepositories.totalCount }}</small>
-			&nbsp; &nbsp;
-			<a :href="user.node.url" target="_blank" rel="noopener noreferrer">View</a>
+			<small v-if="user.node.location">🏠 {{ user.node.location }} </small>&nbsp;
+			<small class="stars"> ⭐️ {{ user.node.starredRepositories.totalCount }}</small>&nbsp; &nbsp;
+			<a :href="user.node.url" target="_blank" rel="noopener noreferrer">View <span class="sr-only">{{ user.node.name || user.node.login }}</span></a>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import MyCardSkeleton from '@/components/MyCardSkeleton.vue'
 export default defineComponent({
 
 	name: 'MyCard',
@@ -32,7 +33,23 @@ export default defineComponent({
 		users() {
 			return this.$store.state.users
 		}
-	}
+	},
+
+	data() {
+		return {
+			updatedDOM: false
+		}
+	},
+
+	components: {
+		MyCardSkeleton
+	},
+
+	watch: {
+		users: function() {
+			this.$nextTick(() => this.updatedDOM = true)
+		}
+	},
 })
 </script>
 
@@ -67,6 +84,7 @@ export default defineComponent({
 				color: #607d8b
 			}
 		}
+		.stars { display: inline-block }
 	}
 }
 

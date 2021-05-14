@@ -7,7 +7,7 @@
 		</label>
 		<button type="submit" @click.prevent="search()">Search</button>
 	</form>
-	<span v-if="!sleep && !loading && !error" class="userCount"> {{ userCount }} User </span>
+	<span v-if="!sleep && !loading && !error && updatedDOM" class="userCount"> {{ userCount }} User </span>
 </template>
 
 <script lang="ts">
@@ -20,12 +20,19 @@ export default defineComponent({
 
 	data() {
 		return {
-			query: ''
+			query: '',
+			updatedDOM: false
 		}
 	},
 
 	computed: {
 		...mapGetters(['sleep', 'loading', 'error', 'userCount'])
+	},
+
+	watch: {
+		userCount: function() {
+			this.$nextTick(() => this.updatedDOM = true )
+		}
 	},
 
 	methods: {
