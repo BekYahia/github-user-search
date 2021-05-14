@@ -17,7 +17,7 @@ But Long Story Short:
 - Vue3 and it's ecosystem
 
 ### also,
-- **Inert**: To differentiate focus between keyboard and mouse users, for better focus managment. *FOR better accessibility :)* [Inert repo](https://github.com/WICG/inert)
+- **focus-visible**: To differentiate focus between keyboard and mouse users, and better focus managment. *FOR better accessibility :)* [view repo](https://github.com/WICG/focus-visible)
 - **Card skeleton loader**, *FOR better User Experience* [a post on dev.to](https://dev.to/devggaurav/build-a-simple-card-skeleton-loader-component-using-html-and-css-3a20)
 
 ## NOTE
