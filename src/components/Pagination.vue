@@ -1,5 +1,5 @@
 <template>
-	<nav v-if="!loading && userCount" aria-label="Pagination">
+	<nav v-if="!loading && !error && userCount" aria-label="Pagination">
 		<a
 			@click="prev()"
 			:class="['navigator', pageInfo.hasPreviousPage ? 'active' : '']"
@@ -43,7 +43,7 @@ export default defineComponent({
 	},
 
 	computed: {
-		...mapGetters(['userCount', 'pageInfo', 'loading', 'query']),
+		...mapGetters(['userCount', 'pageInfo', 'loading', 'query', 'error']),
 
 		pages() {
 			if(!this.userCount) return
