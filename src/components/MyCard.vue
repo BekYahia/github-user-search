@@ -6,8 +6,8 @@
 			<div class="">
 				<h2>{{ user.node.name || '-' }}</h2>
 				<small>@{{ user.node.login }}</small><br />
-				<small><strong>Following:</strong> {{ user.node.following.totalCount }} </small>&nbsp; &nbsp;
-				<small><strong>Followers:</strong> {{ user.node.followers.totalCount }}</small>
+				<small><strong>Following:</strong> {{ user.node.following?.totalCount }} </small>&nbsp; &nbsp;
+				<small><strong>Followers:</strong> {{ user.node.followers?.totalCount }}</small>
 
 			</div>
 		</div>
@@ -16,7 +16,7 @@
 		</div>
 		<div class="card-footer">
 			<small v-if="user.node.location">🏠 {{ user.node.location }} </small>&nbsp;
-			<small class="stars"> ⭐️ {{ user.node.starredRepositories.totalCount }}</small>&nbsp; &nbsp;
+			<small class="stars"> ⭐️ {{ user.node.starredRepositories?.totalCount }}</small>&nbsp; &nbsp;
 			<a :href="user.node.url" target="_blank" rel="noopener noreferrer">View <span class="sr-only">{{ user.node.name || user.node.login }}</span></a>
 		</div>
 	</div>
