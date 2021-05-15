@@ -14,14 +14,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default defineComponent({
 
 	name: 'MySuspense',
 
 	computed: {
-		...mapState(['loading', 'error', 'sleep'])
+		...mapGetters(['loading', 'error', 'sleep'])
 	}
 
 })
