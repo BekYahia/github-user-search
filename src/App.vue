@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination.vue'
 import SearchForm from '@/components/SearchForm.vue'
 import MySuspense from '@/components/MySuspense.vue'
@@ -53,7 +53,7 @@ export default defineComponent({
 	},
 
 	computed: {
-		...mapState(['userCount', 'pageInfo', 'sleep', 'error', 'loading'])
+		...mapGetters(['userCount', 'pageInfo', 'sleep', 'error', 'loading'])
 	}
 })
 </script>
