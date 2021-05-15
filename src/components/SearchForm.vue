@@ -37,7 +37,9 @@ export default defineComponent({
 
 	methods: {
 		search(): void {
-			console.log('searching...')
+
+			this.$store.commit('set_currentPage', 'rest')
+
 			this.$store
 				.dispatch('search', {
 					query: this.query,

@@ -4,7 +4,8 @@ export interface State {
 	error: boolean
 	userCount: number
 	users: User[]
-	query: string
+	query: string,
+	currentPage: number
 	pageInfo: PageInfo
 }
 
@@ -44,3 +45,5 @@ interface UserAttributes {
 	url: string
 	websiteUrl?: string
 }
+
+export type CurrentPage = 'next' | 'prev' | 'rest' | number

@@ -1,5 +1,5 @@
 import { createStore, Commit } from "vuex";
-import { State, SearchPayload, User, PageInfo } from '@/types'
+import { State, SearchPayload, User, PageInfo, CurrentPage } from '@/types'
 
 export const state = {
 	sleep: true,
@@ -8,6 +8,7 @@ export const state = {
 	userCount: 0.5, // 0.5 instead 0 to force the dom to be updated. userCount always > 0, see SearchForm.vue
 	users: [] as User[],
 	query: '',
+	currentPage: 1,
 	pageInfo: {
 		startCursor: '',
 		endCursor: '',
@@ -40,6 +41,10 @@ export const getters = {
 	query(state: State) {
 		return state.query
 	},
+
+	currentPage(state: State) {
+		return state.currentPage
+	},
 }
 
 
@@ -71,12 +76,25 @@ export const mutations = {
 	set_query(state: State, payload: string) {
 		return state.query = payload
 	},
+
+	set_currentPage(state: State, payload:CurrentPage): number {
+		switch (payload) {
+			case 'next':
+				return state.currentPage++
+			case 'prev':
+				return state.currentPage--
+			case 'rest':
+				return state.currentPage = 1
+			default:
+				return state.currentPage = +payload
+		}
+	},
+
 }
 
 
 
 interface cmt {commit: Commit}
-
 export const actions = {
 	/**
 	 * Why not GraphQL client?

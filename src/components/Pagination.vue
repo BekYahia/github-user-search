@@ -1,5 +1,5 @@
 <template>
-	<nav v-if="!loading && !error && userCount" aria-label="Pagination">
+	<nav v-if="!loading && !error  && !sleep && userCount" aria-label="Pagination">
 		<a
 			@click="prev()"
 			:class="['navigator', pageInfo.hasPreviousPage ? 'active' : '']"
@@ -36,14 +36,9 @@ export default defineComponent({
 
 	name: 'Pagination',
 
-	data() {
-		return {
-			currentPage: 1
-		}
-	},
 
 	computed: {
-		...mapGetters(['userCount', 'pageInfo', 'loading', 'query', 'error']),
+		...mapGetters(['userCount', 'pageInfo', 'loading', 'query', 'error', 'currentPage', 'sleep']),
 
 		pages(): number {
 			if(!this.userCount) return 0
@@ -58,7 +53,7 @@ export default defineComponent({
 		prev(): void {
 			if(!this.pageInfo.hasPreviousPage) return
 			
-			this.currentPage--
+			this.$store.commit('set_currentPage', 'prev')
 
 			this.$store.dispatch('search', {
 				query: this.query,
@@ -69,7 +64,7 @@ export default defineComponent({
 		next(): void {
 			if(!this.pageInfo.hasNextPage) return
 			
-			this.currentPage++
+			this.$store.commit('set_currentPage', 'next')
 
 			this.$store.dispatch('search', {
 				query: this.query,
@@ -78,7 +73,7 @@ export default defineComponent({
 		},
 
 		goToPage(targetPage: number): void {
-			this.currentPage = targetPage
+			this.$store.commit('set_currentPage', targetPage)
 
 			const itemsPerPage = 49
 			const cursor = targetPage * itemsPerPage - itemsPerPage
