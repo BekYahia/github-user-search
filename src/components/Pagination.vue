@@ -45,8 +45,8 @@ export default defineComponent({
 	computed: {
 		...mapGetters(['userCount', 'pageInfo', 'loading', 'query', 'error']),
 
-		pages() {
-			if(!this.userCount) return
+		pages(): number {
+			if(!this.userCount) return 0
 
 			//GitHub Search API provides up to 1,000 results for each search
 			const newCount:number = this.userCount > 1000 ?  1000 : this.userCount

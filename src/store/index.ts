@@ -1,12 +1,12 @@
-import { createStore } from "vuex";
-import { State } from '@/types'
+import { createStore, Commit } from "vuex";
+import { State, SearchPayload, User, PageInfo } from '@/types'
 
 export const state = {
 	sleep: true,
 	loading: false,
 	error: false,
-	userCount: 0,
-	users: [],
+	userCount: 0.5, // 0.5 instead 0 to force the dom to be updated. userCount always > 0, see SearchForm.vue
+	users: [] as User[],
 	query: '',
 	pageInfo: {
 		startCursor: '',
@@ -59,12 +59,12 @@ export const mutations = {
 	set_userCount(state: State, payload: number) {
 		return state.userCount = payload
 	},
-
-	set_users(state: State, payload: any[]) {
+	
+	set_users(state: State, payload: User[] ) {
 		return state.users = payload
 	},
 
-	set_pageInfo(state: State, page: any) {
+	set_pageInfo(state: State, page: PageInfo) {
 		return state.pageInfo = page
 	},
 
@@ -73,89 +73,99 @@ export const mutations = {
 	},
 }
 
+
+
+interface cmt {commit: Commit}
+
+export const actions = {
+	/**
+	 * Why not GraphQL client?
+	 * They're powerfull with awesome features, but in a single query app, simple HTTP request is enough.
+	 */
+	search({commit}: cmt, {query, style}: SearchPayload) {
+		commit('set_loading', true)
+		commit('set_error', false)
+		commit('set_sleep', false)
+		commit('set_query', query)
+
+		fetch('https://api.github.com/graphql', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${process.env.VUE_APP_GITHUB_TOKEN}`
+			},
+			body: JSON.stringify({
+				query:
+				`{
+					search(query: "${query}", type: USER, ${style}) {
+						pageInfo {
+							endCursor
+							startCursor
+							hasNextPage
+							hasPreviousPage
+						}
+						userCount
+						edges {
+							node {
+								... on User {
+									id
+									login
+									name
+									location
+									bio
+									company
+									url
+									avatarUrl
+									twitterUsername
+									websiteUrl
+									createdAt
+									updatedAt
+									databaseId
+									followers {
+										totalCount
+									}
+									following {
+										totalCount
+									}
+									starredRepositories {
+										totalCount
+									}
+									repositories {
+										totalCount
+									}
+								}
+							}
+							cursor
+						}
+					}
+				}`
+			}),
+		})
+		 .then(res => {
+			res.json()
+				.then(r => {
+					commit('set_userCount', r.data.search.userCount)
+					commit('set_pageInfo', r.data.search.pageInfo)
+					commit('set_users', r.data.search.edges)
+				})
+				.catch(j => {
+					console.log({j})
+					commit('set_error', true)
+				})
+		 })
+		 .catch(rej => {
+			 console.log({rej})
+			 commit('set_error', true)
+		 })
+		 .finally(() => commit('set_loading', false))
+	}
+}
+
+
 export default createStore({
 	strict: true,
 	state,
 	getters,
 	mutations,
-	actions: {
-		search({commit}, {query, style}) {
-
-			commit('set_loading', true)
-			commit('set_error', false)
-			commit('set_sleep', false)
-			commit('set_query', query)
-
-			fetch('https://api.github.com/graphql', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${process.env.VUE_APP_GITHUB_TOKEN}`
-				},
-				body: JSON.stringify({
-					query:
-					`{
-						search(query: "${query}", type: USER, ${style}) {
-							pageInfo {
-								endCursor
-								startCursor
-								hasNextPage
-								hasPreviousPage
-							}
-							userCount
-							edges {
-								node {
-									... on User {
-										id
-										login
-										name
-										location
-										bio
-										company
-										url
-										avatarUrl
-										twitterUsername
-										websiteUrl
-										createdAt
-										updatedAt
-										databaseId
-										followers {
-											totalCount
-										}
-										following {
-											totalCount
-										}
-										starredRepositories {
-											totalCount
-										}
-										repositories {
-											totalCount
-										}
-									}
-								}
-								cursor
-							}
-						}
-					}`
-				}),
-			})
-			 .then(res => {
-				res.json()
-					.then(r => {
-						commit('set_userCount', r.data.search.userCount)
-						commit('set_pageInfo', r.data.search.pageInfo)
-						commit('set_users', r.data.search.edges)
-					})
-					.catch(j => {
-						console.log({j})
-						commit('set_error', true)
-					})
-			 })
-			 .catch(rej => {
-				 console.log({rej})
-				 commit('set_error', true)
-			 })
-			 .finally(() => commit('set_loading', false))
-	}
-  },
+	actions,
 });

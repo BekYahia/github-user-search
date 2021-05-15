@@ -30,7 +30,7 @@ export default defineComponent({
 	},
 
 	watch: {
-		userCount: function() {
+		userCount: function(): void {
 			this.$nextTick(() => this.updatedDOM = true )
 		}
 	},

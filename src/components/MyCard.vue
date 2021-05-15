@@ -1,6 +1,6 @@
 <template>
 	<MyCardSkeleton v-if="!updatedDOM" />
-	<div class="card" v-for="user in users" :key="user.id">
+	<div class="card" v-for="user in users" :key="user.node.id">
 		<div class="card-header">
 			<img width="50" height="50" :src="user.node.avatarUrl" alt="profile pic" />
 			<div class="">
@@ -46,7 +46,7 @@ export default defineComponent({
 	},
 
 	watch: {
-		users: function() {
+		users: function(): void {
 			this.$nextTick(() => this.updatedDOM = true)
 		}
 	},
