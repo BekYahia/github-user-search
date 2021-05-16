@@ -1,12 +1,17 @@
 import SearchForm from '@/components/SearchForm.vue'
 import { mount } from '@vue/test-utils'
 
+const commit = jest.fn()
+const dispatch = jest.fn()
+
 const factory = (getters: any, data: any) => {
 	return mount(SearchForm, {
 		global: {
 			mocks: {
 				$store: {
-					getters
+					getters,
+					commit,
+					dispatch
 				}
 			}
 		},
@@ -18,6 +23,9 @@ const factory = (getters: any, data: any) => {
 	})
 }
 
+beforeEach(() => {
+	jest.clearAllMocks()
+})
 
 describe('SearchForm.vue', () => {
 
@@ -83,5 +91,28 @@ describe('SearchForm.vue', () => {
 			}
 		)
 		expect(wrapper.find('span[data-test=user-count]').exists()).toBeFalsy()
+	})
+
+	it('Perform search: rest current page and dispatch search', async () => {
+		const wrapper = factory(
+			{
+				sleep: false,
+				loading: false,
+				error: false,
+				userCount: 5
+			},
+			{
+				query: 'bek',
+				updatedDOM: false
+			}
+		)
+		
+		await wrapper.find('button').trigger('click')
+
+		expect(commit).toHaveBeenCalledWith('set_currentPage', 'rest')
+		expect(dispatch).toHaveBeenCalledWith('search', {
+			query: 'bek',
+			style: 'first: 51'
+		})
 	})
 })
