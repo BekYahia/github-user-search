@@ -15,7 +15,7 @@
 			:aria-label="`Page ${page}`"
 			:aria-current="currentPage == page ? true : false"
 			class="item" tabindex="0"
-			data-test='page'
+			:data-test='`page_${page}`'
 		>
 			{{ page }}
 		</a>
