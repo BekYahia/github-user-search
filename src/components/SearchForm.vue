@@ -7,7 +7,7 @@
 		</label>
 		<button type="submit" @click.prevent="search()">Search</button>
 	</form>
-	<span v-if="!sleep && !loading && !error && updatedDOM" class="userCount"> {{ userCount }} User </span>
+	<span v-if="!sleep && !loading && !error && updatedDOM" class="userCount" data-test="user-count"> {{ userCount }} User </span>
 </template>
 
 <script lang="ts">

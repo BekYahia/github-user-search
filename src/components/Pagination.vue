@@ -4,6 +4,7 @@
 			@click="prev()"
 			:class="['navigator', pageInfo.hasPreviousPage ? 'active' : '']"
 			:tabindex='pageInfo.hasPreviousPage ? 0 : -1'
+			data-test="prev"
 		>
 			<span aria-hidden="true" v-text="'<<'"></span> Previous
 		</a>
@@ -13,7 +14,8 @@
 			@click="goToPage(page)"
 			:aria-label="`Page ${page}`"
 			:aria-current="currentPage == page ? true : false"
-			class="item" tabindex="0" 
+			class="item" tabindex="0"
+			data-test='page'
 		>
 			{{ page }}
 		</a>
@@ -22,6 +24,7 @@
 			@click="next()"
 			:class="['navigator', pageInfo.hasNextPage ? 'active' : '']"
 			:tabindex='pageInfo.hasNextPage ? 0 : -1'
+			data-test="next"
 		>
 			Next <span  aria-hidden="true" v-text="'>>'"></span>
 		</a>

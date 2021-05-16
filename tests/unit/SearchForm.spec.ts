@@ -1,20 +1,87 @@
 import SearchForm from '@/components/SearchForm.vue'
 import { mount } from '@vue/test-utils'
 
-describe('Search Form', () => {
-	it('UNCOMPLETED TEST', () => {
+const factory = (getters: any, data: any) => {
+	return mount(SearchForm, {
+		global: {
+			mocks: {
+				$store: {
+					getters
+				}
+			}
+		},
+		data() {
+			return {
+				...data 
+			}
+		}
+	})
+}
 
-		/*
-		const wrapper = mount(SearchForm)
-		const input = wrapper.find('input[data-test=search-input]')
 
-		input.setValue('BekYahia')
+describe('SearchForm.vue', () => {
 
-		wrapper.find('button').trigger('submit')
-		*/
+	it('disply user count after loading and updating the DOM', () => {
+		const wrapper = factory(
+			{
+				sleep: false,
+				loading: false,
+				error: false,
+				userCount: 0
+			},
+			{
+				query: '',
+				updatedDOM: true
+			}
+		)
+		expect(wrapper.find('span[data-test=user-count]').text().trim()).toBe('0 User')
+	})
 
-		const comingSoon = true
+	it('hide user count while loading', () => {
+		const wrapper = factory(
+			{
+				sleep: false,
+				loading: true,
+				error: false,
+				userCount: 5
+			},
+			{
+				query: '',
+				updatedDOM: false
+			}
+		)
+		expect(wrapper.find('span[data-test=user-count]').exists()).toBeFalsy()
+	})
 
-		expect(comingSoon).toBe(comingSoon)
+	it('hide user count when we have an error', () => {
+		const wrapper = factory(
+			{
+				sleep: false,
+				loading: false,
+				error: true,
+				userCount: 5
+			},
+			{
+				query: '',
+				updatedDOM: false
+			}
+		)
+		expect(wrapper.find('span[data-test=user-count]').exists()).toBeFalsy()
+	})
+
+	it('hide user count while updating the DOM', () => {
+		const wrapper = factory(
+			{
+				sleep: false,
+				loading: false,
+				error: false,
+				userCount: 5
+			},
+			{
+				query: '',
+				updatedDOM: false
+			}
+		)
+		expect(wrapper.find('span[data-test=user-count]').exists()).toBeFalsy()
 	})
 })

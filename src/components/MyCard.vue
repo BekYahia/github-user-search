@@ -1,11 +1,11 @@
 <template>
 	<MyCardSkeleton v-if="!updatedDOM" />
-	<div class="card" v-for="user in users" :key="user.node.id">
+	<div class="card" data-test="card" v-for="user in users" :key="user.node.id">
 		<div class="card-header">
 			<img width="50" height="50" :src="user.node.avatarUrl" alt="profile pic" />
 			<div class="">
 				<h2>{{ user.node.name || '-' }}</h2>
-				<small>@{{ user.node.login }}</small><br />
+				<small data-test="login">@{{ user.node.login }}</small><br />
 				<small><strong>Following:</strong> {{ user.node.following?.totalCount }} </small>&nbsp; &nbsp;
 				<small><strong>Followers:</strong> {{ user.node.followers?.totalCount }}</small>
 
