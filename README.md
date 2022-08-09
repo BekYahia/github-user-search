@@ -11,7 +11,7 @@ But Long Story Short:
 - Up to 10 requests, For Unauthenticated requests
 
 ## Demo
-[Live Demo](https://github-user-search-619.herokuapp.com/)
+[Live Demo](https://abubakeryahia.com/demos/github-user-search)
 
 ## Built with
 - Vue3 and it's ecosystem
